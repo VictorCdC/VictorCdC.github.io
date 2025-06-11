@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para minha linda little blue 💙</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Feliz Dia dos Namorados!</h1>
+            <h2>Para a pessoa mais especial da minha vida  💙 </h2>
+        </header>
+        
+        <main>
+            
+            <div class="love-counter">
+                <div class="heart">❤</div>
+                <div class="counter-container">
+                    <p>Nós estamos juntos há</p>
+                    <div id="days-together">0</div>
+                    <p>dias</p>
+                </div>
+            </div>
+            
+            <div class="message">
+                <p>Minha little blue,</p>
+                <p>Desde o momento em que te conheci, eu percebi a pessoa maravilhosa que você é. Cada momento que tenho com você é incrível. Com você, eu tive as melhores experiências, os melhores momentos. Gosto de cada segundo quando estou com você. Você sabe, mas não custa repetir que você faz minha vida mais divertida e feliz. Quero estar com você em todos os momentos, todas as fases, construir um futuro com você, neném. Te amo muito, muito, muito, amor!</p>
+                <p>Obrigado por ser essa pessoa incrivel que você é neném</p>
+                <p>Te amo demais minha little blue </p>
+                <p>20/12/2024 - Until the end,</p>
+                <p>- Tito Tuto Tuco</p>
+            </div>
+        </main>
+        
+        <button id="gallery-btn" class="floating-btn"></button>
+        
+        
+        <div id="gallery-overlay" class="gallery-overlay">
+            <div class="gallery-content">
+                
+<div class="video-container">
+    <h3>Veja veja veja</h3>
+    <!-- Player do YouTube - Substitua SEU_ID_DO_VIDEO pelo ID do seu vídeo -->
+    <iframe width="100%" height="315" src="https://www.youtube.com/watch?v=sZBHuvpmHRw" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+    </iframe>
+</div>
+                <span class="close-btn">&times;</span>
+                <h2></h2>
+                <div class="gallery-grid">
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p><span id="current-year"></span></p>
+        </footer>
+    </div>
+
+   
+    <div id="hearts-container"></div>
+
+
+    <script>
+    
+        const startDate = new Date('2024-12-20'); 
+        
+        function updateCounter() {
+            const today = new Date();
+            const timeDiff = today - startDate;
+            const daysTogether = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('days-together').textContent = daysTogether;
+            
+            
+            if (today.getDate() === startDate.getDate() && today.getMonth() === startDate.getMonth()) {
+                alert(`Feliz ${today.getFullYear() - startDate.getFullYear()} anos de namoro, amor da minha vida! 💖`);
+            }
+        }
+        
+       
+        const galleryBtn = document.getElementById('gallery-btn');
+        const galleryOverlay = document.getElementById('gallery-overlay');
+        const closeBtn = document.querySelector('.close-btn');
+
+        galleryBtn.addEventListener('click', () => {
+            galleryOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+        });
+
+        closeBtn.addEventListener('click', () => {
+            galleryOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+       
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.classList.add('heart-fall');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random() * 0.7 + 0.3;
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            
+            document.getElementById('hearts-container').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        
+        updateCounter();
+        setInterval(updateCounter, 86400000); 
+        setInterval(createHeart, 300); 
+    </script>
+</body>
+</html>
