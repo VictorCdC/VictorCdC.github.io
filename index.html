@@ -9,11 +9,20 @@
 <body>
     <div class="container">
         <header>
-            <h1>Feliz Dia dos Namorados!</h1>
-            <h2>Para a pessoa mais especial da minha vida  💙 </h2>
+            <h1>Feliz 6 meses amooooor!!</h1>
+            <h2>💙</h2>
         </header>
         
         <main>
+          <div class="audio-player">
+    <audio id="bgMusic" loop>
+        <source src="audio/nossamusica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+    <button id="musicBtn" class="music-button">🎵 Ligar Música</button>
+    <span class="music-credits">"Nossa Música"</span>
+</div>
+<div id="rhythm-hearts"></div>
             
             <div class="love-counter">
                 <div class="heart">❤</div>
@@ -25,12 +34,37 @@
             </div>
             
             <div class="message">
-                <p>Minha little blue,</p>
-                <p>Desde o momento em que te conheci, eu percebi a pessoa maravilhosa que você é. Cada momento que tenho com você é incrível. Com você, eu tive as melhores experiências, os melhores momentos. Gosto de cada segundo quando estou com você. Você sabe, mas não custa repetir que você faz minha vida mais divertida e feliz. Quero estar com você em todos os momentos, todas as fases, construir um futuro com você, neném. Te amo muito, muito, muito, amor!</p>
-                <p>Obrigado por ser essa pessoa incrivel que você é neném</p>
-                <p>Te amo demais minha little blue </p>
-                <p>20/12/2024 - Until the end,</p>
-                <p>- Tito Tuto Tuco</p>
+                <p>Hoje é o dia que celebramos metade de um ano de um ano juntos e um amor que só vem crescendo cada vez mais. O tempo simplesmente voou entando com você amor, mas cada segundo ao seu lado é um presente que guardo no coração, com você me sinto amado de um jeito que nunca fui neném. Lembra daquele dia que a gente foi pro porão bebemos, nos divertimos, tivemos nosso momento juntos, so nois dois? Hoje iremos repetir esse momento maravilhoso.</p>
+                <p>Que essa data seja só o primeiro capítulo de muitos anos pela frente.</p>
+                <p>Te amo amo muito minha little blue 💙. </p>
+              </div>
+        </main>
+         <div class="memory-wall">
+                <h3>Fotinhas</h3>
+                
+                <div class="memory-container">
+                    <div class="memory-item">
+                        <div class="memory-title">💙</div>
+                        <div class="memory-photo">
+                            <img src="imagens/foto1.jpg" alt="Nosso primeiro encontro">
+                        </div>
+                    </div>
+                    
+                    <div class="memory-item">
+                        <div class="memory-title">💙</div>
+                        <div class="memory-photo">
+                            <img src="imagens/foto2.jpg" alt="Nossa primeira viagem">
+                        </div>
+                    </div>
+                    
+                    <div class="memory-item">
+                        <div class="memory-title">💙</div>
+                        <div class="memory-photo">
+                            <img src="imagens/foto3.jpg" alt="Nosso aniversário">
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </main>
         
@@ -60,7 +94,7 @@
         </div>
         
         <footer>
-            <p><span id="current-year"></span></p>
+            <p>20/12/2024 - Until the end</p>
         </footer>
     </div>
 
@@ -70,60 +104,150 @@
 
     <script>
     
-        const startDate = new Date('2024-12-20'); 
-        
-        function updateCounter() {
-            const today = new Date();
-            const timeDiff = today - startDate;
-            const daysTogether = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            
-            document.getElementById('days-together').textContent = daysTogether;
-            
-            
-            if (today.getDate() === startDate.getDate() && today.getMonth() === startDate.getMonth()) {
-                alert(`Feliz ${today.getFullYear() - startDate.getFullYear()} anos de namoro, amor da minha vida! 💖`);
-            }
-        }
-        
-       
-        const galleryBtn = document.getElementById('gallery-btn');
-        const galleryOverlay = document.getElementById('gallery-overlay');
-        const closeBtn = document.querySelector('.close-btn');
+const startDate = new Date('2024-12-20'); 
 
-        galleryBtn.addEventListener('click', () => {
-            galleryOverlay.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; 
+// ========== CONTADOR DE DIAS ==========
+function updateCounter() {
+    const today = new Date();
+    const timeDiff = today - startDate;
+    const daysTogether = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    
+    document.getElementById('days-together').textContent = daysTogether;
+    
+    if (today.getDate() === startDate.getDate() && today.getMonth() === startDate.getMonth()) {
+        alert(`Feliz ${today.getFullYear() - startDate.getFullYear()} anos de namoro, amor da minha vida! 💖`);
+    }
+}
+
+// ========== GALERIA DE FOTOS ==========
+const galleryBtn = document.getElementById('gallery-btn');
+const galleryOverlay = document.getElementById('gallery-overlay');
+const closeBtn = document.querySelector('.close-btn');
+
+galleryBtn.addEventListener('click', () => {
+    galleryOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; 
+});
+
+closeBtn.addEventListener('click', () => {
+    galleryOverlay.style.display = 'none';
+    document.body.style.overflow = 'auto';
+});
+
+// ========== SISTEMA DE ÁUDIO AVANÇADO ==========
+const bgMusic = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+let isMusicPlaying = false;
+
+// Configuração da Análise de Áudio
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = audioContext.createAnalyser();
+const source = audioContext.createMediaElementSource(bgMusic);
+
+source.connect(analyser);
+analyser.connect(audioContext.destination);
+analyser.fftSize = 64; // Precisão da análise
+
+// Variáveis para controle dos corações
+let animationId;
+const heartIntensities = [];
+
+// Análise do ritmo musical
+function analyzeMusic() {
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+    
+    // Calcula intensidade média (0-255)
+    const intensity = dataArray.reduce((a, b) => a + b) / bufferLength;
+    heartIntensities.push(intensity);
+    
+    // Mantém apenas as últimas leituras
+    if (heartIntensities.length > 5) heartIntensities.shift();
+    
+    animationId = requestAnimationFrame(analyzeMusic);
+}
+
+// Cria corações sensíveis à música
+function createMusicalHeart() {
+    const avgIntensity = heartIntensities.length > 0 ? 
+        heartIntensities.reduce((a, b) => a + b) / heartIntensities.length : 20;
+    
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤';
+    heart.classList.add('heart-fall');
+    
+    // Configurações baseadas no ritmo
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+    heart.style.opacity = 0.3 + (avgIntensity / 255) * 0.7;
+    heart.style.fontSize = (10 + avgIntensity / 10) + 'px';
+    heart.style.color = `hsl(${340 + avgIntensity / 5}, 100%, 65%)`;
+    heart.style.filter = `drop-shadow(0 0 ${avgIntensity / 30}px rgba(255, 0, 100, 0.7))`;
+    
+    document.getElementById('hearts-container').appendChild(heart);
+    
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}
+
+// Controle do player de música
+musicBtn.addEventListener('click', () => {
+    if (isMusicPlaying) {
+        bgMusic.pause();
+        cancelAnimationFrame(animationId);
+        musicBtn.textContent = '🎵 Ligar Música';
+    } else {
+        audioContext.resume().then(() => {
+            bgMusic.play();
+            analyzeMusic();
+            musicBtn.textContent = '🔊 Tocando...';
         });
+    }
+    isMusicPlaying = !isMusicPlaying;
+});
 
-        closeBtn.addEventListener('click', () => {
-            galleryOverlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
+// Inicialização segura (requer interação do usuário)
+document.addEventListener('click', function initAudio() {
+    bgMusic.volume = 0.3;
+    audioContext.resume().then(() => {
+        bgMusic.play()
+            .then(() => {
+                analyzeMusic();
+                musicBtn.textContent = '🔊 Tocando...';
+                isMusicPlaying = true;
+            })
+            .catch(e => console.log("Autoplay bloqueado:", e));
+    });
+    document.removeEventListener('click', initAudio);
+}, { once: true });
 
-       
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤';
-            heart.classList.add('heart-fall');
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.opacity = Math.random() * 0.7 + 0.3;
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            
-            document.getElementById('hearts-container').appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }
+// ========== INICIALIZAÇÃO GERAL ==========
+updateCounter();
+setInterval(updateCounter, 86400000);
 
-        
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+// Cria corações normais quando sem música, musicais quando com música
+setInterval(() => {
+    isMusicPlaying ? createMusicalHeart() : createHeart();
+}, 300);
 
-        
-        updateCounter();
-        setInterval(updateCounter, 86400000); 
-        setInterval(createHeart, 300); 
+// Função original de corações (mantida como fallback)
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤';
+    heart.classList.add('heart-fall');
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+    heart.style.opacity = Math.random() * 0.7 + 0.3;
+    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    
+    document.getElementById('hearts-container').appendChild(heart);
+    
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}
     </script>
 </body>
 </html>
